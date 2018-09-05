@@ -1,0 +1,6 @@
+---
+
+- include: tasks/install_epel_release.yml
+- include: tasks/add_mongo_repo.yml
+- include: tasks/install_mongodb.yml
+- include: tasks/add_configuration_and_start_mongod.yml

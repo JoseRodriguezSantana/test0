@@ -1,0 +1,12 @@
+uptream app {
+    server 192.168.76.83:5000;
+    server 192.168.76.84:5001;
+}
+
+server {
+    listen 80;
+
+    location / {
+        proxy_pass http://app;
+    }
+}

@@ -1,0 +1,44 @@
+---
+
+# NOTE: bring stack down
+- hosts: loadbalancer
+  become: true
+  tasks:
+    - service:
+        name: nginx
+        state: stopped
+        enabled: yes
+
+- hosts: webserver
+  become: true
+  tasks:
+    - service:
+        name: nginx
+        state: stopped
+        enabled: yes
+
+# NOTE: Restart mysqld
+- hosts: database
+  become: true
+  tasks:
+    - service:
+        name: mysqld
+        state: restarted
+        enabled: yes
+
+# NOTE: bring stack up
+- hosts: webserver
+  become: true
+  tasks:
+    - service:
+        name: nginx
+        state: started
+        enabled: yes
+
+- hosts: loadbalancer
+  become: true
+  tasks:
+    - service:
+        name: nginx
+        state: started
+        enabled: yes

@@ -1,0 +1,50 @@
+---
+
+- name: install epel-release
+  yum:
+    name: epel-release
+    state: present
+
+- name: install nginx
+  yum:
+    name: nginx
+    update_cache: yes
+    state: present
+
+- name: Configure NGINX to recognize server blocks
+  file:
+    path: "/etc/nginx/{{ folder }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 755
+  with_items:
+    - sites-available
+    - sites-enabled
+  loop_control:
+    loop_var: folder
+
+- lineinfile:
+    path: /etc/nginx/nginx.conf
+    regexp: '^} '
+    insertbefore: '^}'
+    line: "{{ l }}"
+  with_items:
+    - "include /etc/nginx/sites-enabled/*.conf;"
+    - "server_names_hash_bucket_size 64;"
+  loop_control:
+    loop_var: l
+
+- name: copy nginx config file
+  template: >
+      src=templates/nginx.conf.j2
+      dest=/etc/nginx/sites-available/default
+      mode=0644
+
+- file:
+    src: /etc/nginx/sites-available/default
+    dest: /etc/nginx/sites-enabled/default
+    owner: root
+    group: root
+    state: link
+  notify: restart nginx

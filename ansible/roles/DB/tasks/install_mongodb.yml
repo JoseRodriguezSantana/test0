@@ -1,0 +1,7 @@
+---
+
+- name: install mongodb enterprise
+  yum:
+    name: mongodb-enterprise
+    state: present
+    update_cache: yes

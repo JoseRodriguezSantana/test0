@@ -1,0 +1,9 @@
+---
+
+- name: Add repo
+  copy:
+    src: mongodb-enterprise
+    dest: /etc/yum.repos.d/mongodb-enterprise.repo
+    mode: 644
+    owner: root
+    group: root
